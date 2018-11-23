@@ -36,19 +36,16 @@ public class SocketClient extends Thread{
     
     SocketClient(){
     	server = new SocketServer();
-		server.start(6666);
+		server.start(7777);
 		server.start();
     	frame = new JFrame();
     	friendList = new ArrayList<>();
-    	try {
-			sourceAddr =   InetAddress.getLocalHost(); 
+    
 			startConnection("128.199.83.36", 34261);
+			
 			start();
 			
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		
 		isSuccess = false;
 		frame.setTitle("Chat Socket");
@@ -63,7 +60,7 @@ public class SocketClient extends Thread{
 				out.println("USER:"+login.getUsername()+"\n" + 
 		    			"PASS:"+login.getPassword()+"\n" + 
 		    			"IP:"+sourceAddr.getHostAddress()+"\n" + 
-		    			"PORT:6666\n");
+		    			"PORT:7777\n");
 			}
 		});
 		frame.add(login);
@@ -91,6 +88,7 @@ public class SocketClient extends Thread{
 			clientSocket = new Socket(ip, port);
 			out = new PrintWriter(clientSocket.getOutputStream(), true);
 	        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+	        sourceAddr = clientSocket.getLocalAddress();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -122,7 +120,6 @@ public class SocketClient extends Thread{
 					out.println("Hello Server");
 				}
     		    else {
-    		    	System.out.println(buffer.toString());
     		    	if(buffer.toString().contains("END")) {
     		    		friendList.clear();
     		    		String friends[] =  buffer.toString().split("\\r?\\n");

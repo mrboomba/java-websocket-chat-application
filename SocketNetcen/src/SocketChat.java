@@ -35,6 +35,7 @@ public class SocketChat extends Thread {
 	
 	public SocketChat(String ip,int port) {
 			this.ip = ip;
+			System.out.println(ip+"  "+port);
 			startConnection(ip, port);
 			start();
 			initUI();
@@ -46,6 +47,8 @@ public class SocketChat extends Thread {
 			 	clientSocket = s;
 				out = new PrintWriter(clientSocket.getOutputStream(), true);
 		        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+		        start();
+				initUI();
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -68,7 +71,7 @@ public class SocketChat extends Thread {
 	
 	
 	public void initUI() {
-		frame = new JFrame("");
+		frame = new JFrame(ip);
 		frame.setSize(new Dimension(500, 500));
 		
 		chatPanel = new JPanel(new GridLayout(10,1));
@@ -113,7 +116,7 @@ public class SocketChat extends Thread {
     		{
     			buffer.append(chars, 0, count);
     			System.out.println(buffer);
-    			JLabel j = new JLabel("    "+ip+": "+input.getText().toString(), JLabel.LEFT);
+    			JLabel j = new JLabel("    "+ip+": "+buffer, JLabel.LEFT);
 				j.setForeground(Color.BLACK);
 				messages.add(j);
 				refreshChat();
